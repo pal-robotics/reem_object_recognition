@@ -23,7 +23,7 @@ sink1:
 
 sink2:
   type: ObjectClustersPublisher
-  module: 'object_recognition_tabletop'
+  module: 'object_recognition_clusters'
   inputs: [source1]
 
 pipeline1:
