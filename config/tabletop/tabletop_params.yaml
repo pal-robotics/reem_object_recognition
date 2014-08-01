@@ -1,0 +1,10 @@
+object_recognition_server/filter_planes: false # default false 
+object_recognition_server/min_table_height: 0.5 # default  0.5 # not checked if filter_planes false
+object_recognition_server/max_table_height: 1.5 # default 1.0 # not checked if filter_planes false
+object_recognition_server/robot_frame: /base_link # default base_link
+object_recognition_server/sensor_frame: /head_mount_xtion_optical_frame # default head_mount_kinect_rgb_optical_frame
+# Those I think we must never touch
+# object_recognition_server/max_angle_diff: 0.05 # default 0.1 # not checked if filter_planes false
+# object_recognition_server/table_normal_x: 0.0 # default 0.0
+# object_recognition_server/table_normal_y: 0.0 # default 0.0
+# object_recognition_server/table_normal_z: 1.0# default 1.0

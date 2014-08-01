@@ -11,14 +11,14 @@ source1:
     depth_image_topic: '/head_mount_xtion/depth/image_raw'
     depth_camera_info: '/head_mount_xtion/depth/camera_info'
     #
-    #crop_enabled: True
+    crop_enabled: True
     #x_min: -0.4
     #x_max: 0.4
     #y_min: -1.0
     #y_max: 0.2
-    #z_min: 0.3
-    #z_max: 1.5
-  
+    z_min: 0.3
+    z_max: 1.5
+
 sink1:
   type: TablePublisher
   module: 'object_recognition_tabletop'
@@ -37,11 +37,38 @@ pipeline1:
   outputs: [sink1]
   parameters:
     table_detector:
+        #  The minimum number of points deemed necessary to find a table.
         min_table_size: 4000
-        plane_threshold: 0.01
-    #clusterer:
-    #    table_z_filter_max: 0.35
-    #    table_z_filter_min: 0.025
+        #  The distance used as a threshold when finding a plane
+        plane_threshold: 0.02
+        # from TableDetector.cpp in object_recognition_tabletop
+        # THOSE ARE PARAMETERS, NOT READ IN THIS FILE!
+        # filter_planes: false # default false
+        # min_table_height: 0.1 # default  0.5
+        # max_table_height: 2.0 # default 1.0
+        # robot_frame: /base_link # default base_link
+        # sensor_frame: /head_mount_xtion_optical_frame # default head_mount_kinect_rgb_optical_frame
+        # This params print with this line of code:
+        #       std::cout << __LINE__ << " :: " << min_table_height_ << " , " << max_table_height_ << " , " << min_angle_cos_
+        #        << " , " << robot_frame_id_ << " , " << sensor_frame_id_ << std::endl;
+        # Which printed: (and I had no idea what it meant)
+        # 126 :: 0.5 , 1 , 0.995004 , /base_link , /head_mount_kinect_rgb_optical_frame
+
+
+    #  The maximum distance between a point and the cluster it belongs to.
+    #cluster_distance: 0.0001  # this word is not even found in the sourcecode of tabletop
+    # #  Min number of points for a cluster
+    # min_cluster_size: 300
+    # #  The distance used when clustering a plane
+    # table_cluster_tolerance: 0.2
+    #  The vertical frame id
+    #vertical_frame_id: /base_link # didnt find any difference using /torso_2_link
+    #  The amount to keep in the z direction (meters) relative to the coordinate frame defined by
+    # the pose.
+    #z_crop: 0.5 # i think this does nothing
+    #  The amount to crop above the plane, in meters.
+    z_min: 0.02
+
 
 pipeline2:
   type: TabletopObjectDetector
@@ -62,3 +89,4 @@ pipeline2:
       type: CouchDB
       root: http://localhost:5984
       collection: object_recognition
+
